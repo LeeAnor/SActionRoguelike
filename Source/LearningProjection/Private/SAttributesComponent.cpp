@@ -13,13 +13,15 @@ USAttributesComponent::USAttributesComponent()
 
 bool USAttributesComponent::ApplyHealthChange(float Delta)
 {
-	
-	Health += Delta;
-	Health = FMath::Clamp(Health, 0.0f, MaxHealth);
+	float OldHealth = Health;
 
-	OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
+	Health = FMath::Clamp(Health += Delta, 0.0f, MaxHealth);
 
-	return true;
+	float ActualDelta = Health - OldHealth;
+
+	OnHealthChanged.Broadcast(nullptr, this, Health, ActualDelta);
+
+	return ActualDelta != 0;
 }
 
 bool USAttributesComponent::ApplyMaxHealthChange(float Delta)
@@ -39,5 +41,3 @@ bool USAttributesComponent::ApplyExpChange(float Delta)
 
 	return true;
 }
-
-

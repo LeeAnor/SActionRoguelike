@@ -18,8 +18,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* MeshComp;
 
+	UPROPERTY(EditDefaultsOnly)
+	float CooldownTimer;
+
 	FTimerHandle TimerHandle_HealthPotionCooldown;
 
+	void HideAndCooldownHealthPotion();
 	void ReSpawnHealthPotion();
 
 	UFUNCTION()

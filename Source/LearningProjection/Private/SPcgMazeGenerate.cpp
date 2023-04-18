@@ -16,8 +16,8 @@ void ASPcgMazeGenerate::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FVector Scalar = UKismetMathLibrary::MakeVector(rows, cols, 1.0f);
-	FTransform Transform = UKismetMathLibrary::MakeTransform(GetActorLocation(), GetActorRotation(), Scalar);
+	FVector Scalar = UKismetMathLibrary::MakeVector(cols, rows, 1.0f);
+	FTransform Transform = UKismetMathLibrary::MakeTransform(GetActorLocation(), GetActorRotation(), GetActorScale3D() * Scalar);
 
 	MeshFloor->SetWorldTransform(Transform);	//根据rows和cols来设置地板缩放
 

@@ -8,11 +8,10 @@
 // Sets default values
 ASHealthPotion::ASHealthPotion()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
+
+	CooldownTimer = 10.0f;
 
 	MeshComp->OnComponentBeginOverlap.AddDynamic(this, &ASHealthPotion::OnActorOverlap);
 }
@@ -24,23 +23,29 @@ void ASHealthPotion::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		APawn* PlayerPawn = Cast<APawn>(OtherActor);
 		if (PlayerPawn)
 		{
-			SetActorEnableCollision(false);
-			MeshComp->SetVisibility(false);
-
 			USAttributesComponent* PlayerAttributeComp = Cast<USAttributesComponent>(PlayerPawn->GetComponentByClass(USAttributesComponent::StaticClass()));
 			if (PlayerAttributeComp)
 			{
-				PlayerAttributeComp->ApplyHealthChange(50.0f);
-				GetWorldTimerManager().SetTimer(TimerHandle_HealthPotionCooldown, this, &ASHealthPotion::ReSpawnHealthPotion, 10.0f);
+				if (PlayerAttributeComp->ApplyHealthChange(50.0f)) 
+				{
+					HideAndCooldownHealthPotion();
+				}
 			}
 		}
 	}
 }
 
+void ASHealthPotion::HideAndCooldownHealthPotion()
+{
+	SetActorEnableCollision(false);
+	RootComponent->SetVisibility(false);
+	GetWorldTimerManager().SetTimer(TimerHandle_HealthPotionCooldown, this, &ASHealthPotion::ReSpawnHealthPotion, CooldownTimer);
+}
+
 void ASHealthPotion::ReSpawnHealthPotion()
 {
 	SetActorEnableCollision(true);
-	MeshComp->SetVisibility(true);
+	RootComponent->SetVisibility(true);
 }
 
 

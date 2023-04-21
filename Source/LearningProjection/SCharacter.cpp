@@ -39,25 +39,7 @@ void ASCharacter::PostInitializeComponents()
 
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 }
-// Called to bind functionality to input
-void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
-
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
-	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
-	PlayerInputComponent->BindAction("DashAttack", IE_Pressed, this, &ASCharacter::DashAttack);
-	PlayerInputComponent->BindAction("ExplodeAttack", IE_Pressed, this, &ASCharacter::ExplodeAttack);
-	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
-
-}
 
 // Called when the game starts or when spawned
 void ASCharacter::BeginPlay()
@@ -94,6 +76,26 @@ void ASCharacter::MoveRight(float value)
 	FVector rightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
 
 	AddMovementInput(rightVector, value);
+}
+
+// Called to bind functionality to input
+void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
+
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
+	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
+	PlayerInputComponent->BindAction("DashAttack", IE_Pressed, this, &ASCharacter::DashAttack);
+	PlayerInputComponent->BindAction("ExplodeAttack", IE_Pressed, this, &ASCharacter::ExplodeAttack);
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+
 }
 
 void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
@@ -135,6 +137,29 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 	}
 }
 
+void ASCharacter::PrimaryInteract()
+{
+	if (InteractionComp)
+	{
+		InteractionComp->PrimaryInteract();
+	}
+}
+
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta)
+{
+	if (Delta < 0.0f && NewHealth > 0.0f)
+	{
+		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->GetTimeSeconds());	//材质闪烁效果
+
+	}
+	if (NewHealth <= 0.0f && Delta <= 0.0f)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+
+		DisableInput(PC);
+	}
+}
+
 void ASCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(AttackAnim);
@@ -143,7 +168,7 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	//Assignment3-2-2:尝试使用SpawnEmitterAttached代替SpawnEmitterAtLocation，但是没有思路;
+	//Assignment3-2-2:尝试使用SpawnEmitterAttached代替SpawnEmitterAtLocation，Answers:P46
 	//则暂时继续使用SpawnEmitterAtLocation实现手部发射弹丸时的粒子特效。
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), AttackHandVFX, GetMesh()->GetSocketLocation("Muzzle_01"), GetActorRotation());
 
@@ -183,28 +208,7 @@ void ASCharacter::ExplodeAttack_TimeElapsed()
 	SpawnProjectile(ExplodeProjectileClass);
 }
 
-void ASCharacter::PrimaryInteract()
-{
-	if (InteractionComp) 
-	{
-		InteractionComp->PrimaryInteract();
-	}
-}
 
-void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta)
-{
-	if (Delta < 0.0f && NewHealth > 0.0f)
-	{
-		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->GetTimeSeconds());	//材质闪烁效果
-
-	}
-	if (NewHealth <= 0.0f && Delta <= 0.0f)
-	{
-		APlayerController* PC = Cast<APlayerController>(GetController());
-
-		DisableInput(PC);
-	}
-}
 
 
 

@@ -21,4 +21,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Projectile")
 	TSubclassOf<AActor> ProjectileClass;
 
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	bool bScatter;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	float ScatterAngel;
 };

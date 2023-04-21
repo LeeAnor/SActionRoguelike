@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "SAttributesComponent.h"
-#include "SCharacter.generated.h"
+#include "S2DCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
@@ -14,52 +13,28 @@ class USAttributesComponent;
 class UAnimMontage;
 
 UCLASS()
-
-class LEARNINGPROJECTION_API ASCharacter : public ACharacter
+class LEARNINGPROJECTION_API AS2DCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ASCharacter();
+	AS2DCharacter();
 
 protected:
-	float AttackAnimDelay;
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> BlackHoleProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> DashProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ExplodeProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnim;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UParticleSystem* AttackHandVFX;
-
-	FTimerHandle TimerHandle_PrimaryAttack;
-	FTimerHandle TimerHandle_BlackHoleAttack;
-	FTimerHandle TimerHandle_DashAttack;
-	FTimerHandle TimerHandle_ExplodeAttack;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmCmp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraCmp;
-	
+
 	UPROPERTY(VisibleAnywhere, Category = "components")
 	USInteractComponent* InteractionComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 	USAttributesComponent* AttributeComp;
-	
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -69,14 +44,6 @@ protected:
 	void PrimaryAttack();
 	void PrimaryInteract();
 
-	void PrimaryAttack_TimeElapsed();
-	void BlackHoleAttack();
-	void BlackHoleAttack_TimeElapsed();
-	void DashAttack();
-	void DashAttack_TimeElapsed();
-	void ExplodeAttack();
-	void ExplodeAttack_TimeElapsed();
-	
 
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta);

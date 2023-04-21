@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "SAttributesComponent.h"
 #include "SAICharacter.generated.h"
 
 class UPawnSensingComponent;
+class USAttributesComponent;
 
 UCLASS()
 class LEARNINGPROJECTION_API ASAICharacter : public ACharacter
@@ -23,6 +25,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
+	USAttributesComponent* AttributeComp;
+
+
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);

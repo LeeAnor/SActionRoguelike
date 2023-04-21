@@ -18,8 +18,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="AI")
 	UBehaviorTree* BehaviorTree;
 
-	UPROPERTY(EditDefaultsOnly, Category="AI")
-	FName KeyName;
-
 	virtual void BeginPlay() override;
 };

@@ -36,7 +36,7 @@ ASCharacter::ASCharacter()
 void ASCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
+	
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 }
 

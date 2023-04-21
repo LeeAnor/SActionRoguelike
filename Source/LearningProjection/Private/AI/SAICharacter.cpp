@@ -22,6 +22,7 @@ void ASAICharacter::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
     PawnSensingComp->OnSeePawn.AddDynamic(this, &ASAICharacter::OnPawnSeen);
+    
 }
 
 void ASAICharacter::OnPawnSeen(APawn* Pawn)

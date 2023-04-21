@@ -9,6 +9,7 @@
 
 class UPawnSensingComponent;
 class USAttributesComponent;
+class UAnimMontage;
 
 UCLASS()
 class LEARNINGPROJECTION_API ASAICharacter : public ACharacter
@@ -29,10 +30,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 	USAttributesComponent* AttributeComp;
 
-
-
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
-
-
 };

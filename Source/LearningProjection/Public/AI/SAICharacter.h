@@ -22,14 +22,22 @@ public:
 
 protected:
 
-	virtual void PostInitializeComponents() override;
-
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 	USAttributesComponent* AttributeComp;
 
+	UPROPERTY(VisibleAnywhere, Category="Material")
+	FName TimeToHitParamName;
+
+	void SetTargetActor(AActor* NewTargetActor);
+
+	virtual void PostInitializeComponents() override;
+
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta);
 };

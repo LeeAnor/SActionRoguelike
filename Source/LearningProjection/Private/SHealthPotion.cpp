@@ -26,7 +26,7 @@ void ASHealthPotion::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			USAttributesComponent* PlayerAttributeComp = Cast<USAttributesComponent>(PlayerPawn->GetComponentByClass(USAttributesComponent::StaticClass()));
 			if (PlayerAttributeComp)
 			{
-				if (PlayerAttributeComp->ApplyHealthChange(50.0f)) 
+				if (PlayerAttributeComp->ApplyHealthChange(this, 50.0f)) 
 				{
 					HideAndCooldownHealthPotion();
 				}

@@ -3,6 +3,9 @@
 
 #include "SAttributesComponent.h"
 
+
+
+
 // Sets default values for this component's properties
 USAttributesComponent::USAttributesComponent()
 {
@@ -11,7 +14,7 @@ USAttributesComponent::USAttributesComponent()
 	Exp = 0.0f;
 }
 
-bool USAttributesComponent::ApplyHealthChange(float Delta)
+bool USAttributesComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
 	float OldHealth = Health;
 
@@ -19,7 +22,7 @@ bool USAttributesComponent::ApplyHealthChange(float Delta)
 
 	float ActualDelta = Health - OldHealth;
 
-	OnHealthChanged.Broadcast(nullptr, this, Health, ActualDelta);
+	OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
 
 	return ActualDelta != 0;
 }
@@ -40,4 +43,22 @@ bool USAttributesComponent::ApplyExpChange(float Delta)
 	OnExpChanged.Broadcast(nullptr, this, Exp, Delta);
 
 	return true;
+}
+USAttributesComponent* USAttributesComponent::GetAttributes(AActor* FromActor)
+{
+	if (FromActor)
+	{
+		return Cast<USAttributesComponent>(FromActor->GetComponentByClass(USAttributesComponent::StaticClass()));
+	}
+	return nullptr;
+}
+
+bool USAttributesComponent::IsActorAlive(AActor* Actor)
+{
+	USAttributesComponent* AttributesComp = GetAttributes(Actor);
+	if (AttributesComp)
+	{
+		return AttributesComp->IsAlive();
+	}
+	return false;
 }

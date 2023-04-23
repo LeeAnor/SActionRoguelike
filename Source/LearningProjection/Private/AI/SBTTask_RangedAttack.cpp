@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "SAttributesComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 EBTNodeResult::Type USBTTask_RangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -21,7 +22,7 @@ EBTNodeResult::Type USBTTask_RangedAttack::ExecuteTask(UBehaviorTreeComponent& O
 		FVector MuzzleLocation = MyCharacter->GetMesh()->GetSocketLocation("Muzzle_01");
 
 		AActor* TargetActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("TargetActor"));
-		if (TargetActor == nullptr)
+		if (TargetActor == nullptr || !USAttributesComponent::IsActorAlive(TargetActor))
 		{
 			return EBTNodeResult::Failed;
 		}
@@ -30,6 +31,7 @@ EBTNodeResult::Type USBTTask_RangedAttack::ExecuteTask(UBehaviorTreeComponent& O
 		if (bScatter)
 		{
 			MuzzleRotation.Yaw += UKismetMathLibrary::RandomFloatInRange(-ScatterAngel, ScatterAngel);
+			MuzzleRotation.Pitch += UKismetMathLibrary::RandomFloatInRange(0.0f, ScatterAngel);
 		}
 
 		FActorSpawnParameters Params;

@@ -98,6 +98,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 }
 
+
+
 void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
 	if (ensureAlways(ClassToSpawn))
@@ -208,3 +210,8 @@ void ASCharacter::ExplodeAttack_TimeElapsed()
 	SpawnProjectile(ExplodeProjectileClass);
 }
 
+//Exec¿ØÖÆÌ¨º¯Êý
+void ASCharacter::HealSelf(float Amount /* = 100.0*/)
+{
+	AttributeComp->ApplyHealthChange(this, Amount);
+}

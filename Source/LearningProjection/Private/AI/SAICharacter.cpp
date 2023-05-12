@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include "BrainComponent.h"
+#include "SWorldUserWidget.h"
 
 // Sets default values
 ASAICharacter::ASAICharacter()
@@ -46,13 +47,24 @@ void ASAICharacter::OnPawnSeen(APawn* Pawn)
 
 void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta)
 {
-	if (Delta < 0.0f)
-	{
-		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->GetTimeSeconds());	//材质闪烁效果
+    if (Delta < 0.0f)
+    {
+        GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->GetTimeSeconds());	//材质闪烁效果
         if (InstigatorActor != this)
         {
             SetTargetActor(InstigatorActor);
         }
+
+        if (ActiveHealthBar == nullptr)
+        {
+            ActiveHealthBar = CreateWidget<USWorldUserWidget>(GetWorld(), HealthBarWidgetClass);
+            if (ActiveHealthBar)
+            {
+                ActiveHealthBar->AttachedActor = this;
+                ActiveHealthBar->AddToViewport();
+            }
+        }
+
         if (NewHealth <= 0.0)
         {
             //SetActorEnableCollision(false);

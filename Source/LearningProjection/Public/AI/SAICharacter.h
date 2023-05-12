@@ -10,6 +10,7 @@
 class UPawnSensingComponent;
 class USAttributesComponent;
 class UAnimMontage;
+class USWorldUserWidget;
 
 UCLASS()
 class LEARNINGPROJECTION_API ASAICharacter : public ACharacter
@@ -21,6 +22,11 @@ public:
 	ASAICharacter();
 
 protected:
+
+	USWorldUserWidget* ActiveHealthBar;
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget>  HealthBarWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;

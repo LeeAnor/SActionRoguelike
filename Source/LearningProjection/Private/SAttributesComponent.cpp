@@ -16,6 +16,11 @@ USAttributesComponent::USAttributesComponent()
 
 bool USAttributesComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
+	if (!GetOwner()->CanBeDamaged())
+	{
+		return false;
+	}
+
 	float OldHealth = Health;
 
 	Health = FMath::Clamp(Health += Delta, 0.0f, MaxHealth);
@@ -61,4 +66,10 @@ bool USAttributesComponent::IsActorAlive(AActor* Actor)
 		return AttributesComp->IsAlive();
 	}
 	return false;
+}
+
+/*¿ØÖÆÌ¨Execº¯Êý*/
+bool USAttributesComponent::KillSelf(AActor* intigator)
+{
+	return ApplyHealthChange(intigator, -GetMaxHealth());
 }

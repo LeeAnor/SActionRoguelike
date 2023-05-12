@@ -24,6 +24,22 @@ void ASGameModeBase::StartPlay()
 
 }
 
+/* ¿ØÖÆÌ¨Execº¯Êý */
+void ASGameModeBase::KillAll()
+{
+	for (TActorIterator<ASAICharacter> iter(GetWorld()); iter; ++iter)
+	{
+		ASAICharacter* Bot = *iter;
+
+		USAttributesComponent* AttributeComp = USAttributesComponent::GetAttributes(Bot);
+		//if (AttributeComp && AttributeComp->IsAlive())
+		if (AttributeComp)
+		{
+			AttributeComp->KillSelf(this); //@fix me: pass in player? for kill credits
+		}
+	}
+}
+
 void ASGameModeBase::SpawnBotTimerElapsed()
 {
 	

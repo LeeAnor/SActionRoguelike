@@ -17,7 +17,7 @@ class LEARNINGPROJECTION_API USBTTask_RangedAttack : public UBTTaskNode
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
-
+	
 	UPROPERTY(EditAnywhere, Category="Projectile")
 	TSubclassOf<AActor> ProjectileClass;
 

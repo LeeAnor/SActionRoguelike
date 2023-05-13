@@ -51,6 +51,9 @@ public:
 	float GetMaxHealth() const { return MaxHealth; };
 
 	UFUNCTION(BlueprintCallable)
+	float GetHealth() const { return Health; };
+
+	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const { return Health > 0.0f; };
 
 	UFUNCTION(BlueprintCallable)

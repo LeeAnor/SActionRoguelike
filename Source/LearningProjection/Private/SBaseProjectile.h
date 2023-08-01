@@ -20,7 +20,7 @@ public:
 	ASBaseProjectile();
 
 protected:
-
+	
 	UPROPERTY(EditDefaultsOnly, Category="Effects")
 	UParticleSystem* ImpactVFX;
 

@@ -7,6 +7,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include "BrainComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "SWorldUserWidget.h"
 
 // Sets default values
@@ -15,6 +17,10 @@ ASAICharacter::ASAICharacter()
     AttributeComp = CreateDefaultSubobject<USAttributesComponent>("AttributeComp");
 
  	PawnSensingComp= CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+
+    GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
+
+    GetMesh()->SetGenerateOverlapEvents(true);
 
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
@@ -79,6 +85,10 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesCompone
             //set ragdoll
             GetMesh()->SetAllBodiesSimulatePhysics(true);
             GetMesh()->SetCollisionProfileName("Ragdoll");
+
+            //set Capsule be no Collision and disable CharacterMovementComp
+            GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+            GetCharacterMovement()->DisableMovement();
 
             //destory
             SetLifeSpan(10.0f);

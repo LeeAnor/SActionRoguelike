@@ -11,7 +11,7 @@
 #include <../SCharacter.h>
 
 
-static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su. SpawnBots"), true, TEXT("Enable spatning of bots via timer."), ECVF_Cheat);
+static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"), true, TEXT("Enable spatning of bots via timer."), ECVF_Cheat);
 
 ASGameModeBase::ASGameModeBase()
 {

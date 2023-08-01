@@ -5,7 +5,7 @@
 #include "SGamePlayInterface.h"
 #include "DrawDebugHelpers.h"
 
-static TAutoConsoleVariable<bool> CVarDebugDrawInteraction(TEXT("su. Interact ionDebugDraw"), false, TEXT("Enable Debug Lines for Interact Component."), ECVF_Cheat);
+static TAutoConsoleVariable<bool> CVarDebugDrawInteraction(TEXT("su.InteractionDebugDraw"), false, TEXT("Enable Debug Lines for Interact Component."), ECVF_Cheat);
 
 
 void USInteractComponent::PrimaryInteract()

@@ -12,6 +12,8 @@ class USpringArmComponent;
 class USInteractComponent;
 class USAttributesComponent;
 class UAnimMontage;
+class UParticleSysytem;
+class USActionComponent;
 
 UCLASS()
 
@@ -25,6 +27,12 @@ public:
 
 protected:
 	float AttackAnimDelay;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_BlackHoleAttack;
+	FTimerHandle TimerHandle_DashAttack;
+	FTimerHandle TimerHandle_ExplodeAttack;
+
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
@@ -43,11 +51,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UParticleSystem* AttackHandVFX;
 
-	FTimerHandle TimerHandle_PrimaryAttack;
-	FTimerHandle TimerHandle_BlackHoleAttack;
-	FTimerHandle TimerHandle_DashAttack;
-	FTimerHandle TimerHandle_ExplodeAttack;
-
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmCmp;
 
@@ -59,28 +62,37 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="components")
 	USAttributesComponent* AttributeComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
+	USActionComponent* ActionComp;
 	
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	void MoveForward(float value);
-	void MoveRight(float value);
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
-	void PrimaryAttack();
-	void PrimaryInteract();
-
-	void PrimaryAttack_TimeElapsed();
-	void BlackHoleAttack();
-	void BlackHoleAttack_TimeElapsed();
-	void DashAttack();
-	void DashAttack_TimeElapsed();
-	void ExplodeAttack();
-	void ExplodeAttack_TimeElapsed();
-	
-
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta);
 
+	void MoveForward(float value);
+	void MoveRight(float value);
+
+	void PrimaryInteract();
+
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
+
+	void SprintStart();
+	void SprintStop();
+
+	void PrimaryAttack();
+	void PrimaryAttack_TimeElapsed();
+
+	void BlackHoleAttack();
+	void BlackHoleAttack_TimeElapsed();
+
+	void DashAttack();
+	void DashAttack_TimeElapsed();
+
+	void ExplodeAttack();
+	void ExplodeAttack_TimeElapsed();
+
+	virtual void BeginPlay() override;
+	virtual FVector GetPawnViewLocation() const override; 
 	virtual void PostInitializeComponents() override;
 
 public:	

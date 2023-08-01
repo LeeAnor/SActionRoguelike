@@ -5,7 +5,7 @@
 #include <LearningProjection\Public\SGameModeBase.h>
 
 
-static TAutoConsoleVariable<float> CVarDamageMultiplier(TEXT("su. DamageMultiplier"), 1.0f, TEXT("Global Damage Modifier for Attribute Component."), ECVF_Cheat);
+static TAutoConsoleVariable<float> CVarDamageMultiplier(TEXT("su.DamageMultiplier"), 1.0f, TEXT("Global Damage Modifier for Attribute Component."), ECVF_Cheat);
 
 
 // Sets default values for this component's properties
@@ -18,7 +18,7 @@ USAttributesComponent::USAttributesComponent()
 
 bool USAttributesComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
-	if (!GetOwner()->CanBeDamaged())
+	if (!GetOwner()->CanBeDamaged() && Delta < 0.0f)
 	{
 		return false;
 	}

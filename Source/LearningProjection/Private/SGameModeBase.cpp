@@ -99,7 +99,7 @@ void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
 		FTimerHandle TimerHandle_SpawnDelay;
 
 		FTimerDelegate TimerDelegate;
-		TimerDelegate.BindUFunction(this, "RespawnPlayerTimerElapsed", Player->GetController());//以函数名设置定时器
+		TimerDelegate.BindUFunction(this, "RespawnPlayerTimerElapsed", Player->GetController());	//以函数名设置定时器
 
 		float RespawnDelay = 2.0f;
 		GetWorldTimerManager().SetTimer(TimerHandle_SpawnDelay, TimerDelegate, RespawnDelay, false);

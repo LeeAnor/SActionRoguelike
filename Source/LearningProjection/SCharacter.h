@@ -90,9 +90,10 @@ protected:
 
 	void ExplodeAttack();
 	void ExplodeAttack_TimeElapsed();
+	
+	virtual FVector GetPawnViewLocation() const override; 
 
 	virtual void BeginPlay() override;
-	virtual FVector GetPawnViewLocation() const override; 
 	virtual void PostInitializeComponents() override;
 
 public:	

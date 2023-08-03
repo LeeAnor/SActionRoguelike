@@ -14,3 +14,19 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 	UE_LOG(LogTemp, Log, TEXT("Stopping: %s"), *GetNameSafe(this));
 
 }
+
+UWorld* USAction::GetWorld() const
+{
+	/*
+	T* NewObject(UObject* Outer, const UClass* Class, ......)
+	在SActionCompoent->AddAction中的NewObject<USAction>(this, ActionClass)参数里的this就是此时的Outer
+	*/
+	UActorComponent* Comp = Cast<UActorComponent>(GetOuter());
+
+	/*Outer is set when creating action via NewObject<1>*/
+	if (Comp)
+	{
+		return Comp->GetWorld();
+	}
+	return nullptr;
+}

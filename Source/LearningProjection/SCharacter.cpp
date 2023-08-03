@@ -193,7 +193,7 @@ void ASCharacter::PrimaryAttack()
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	//Assignment3-2-2:尝试使用SpawnEmitterAttached代替SpawnEmitterAtLocation，Answers:P46
-	//则暂时继续使用SpawnEmitterAtLocation实现手部发射弹丸时的粒子特效。
+	//UGamEplayStatics::SpawnEmitterAttached(CastingEffect, GetMesh(), "Muzzle_01", FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), AttackHandVFX, GetMesh()->GetSocketLocation("Muzzle_01"), GetActorRotation());
 
 	SpawnProjectile(ProjectileClass);

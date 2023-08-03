@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "SAction.generated.h"
 
+class UWorld;
 /**
  * 
  */
@@ -13,7 +14,6 @@ UCLASS(Blueprintable)
 class LEARNINGPROJECTION_API USAction : public UObject
 {
 	GENERATED_BODY()
-	
 public:
 
 	UFUNCTION(BlueprintNativeEvent, category = "Action")
@@ -26,4 +26,6 @@ public:
 	/*Action nickname to start / stop without a reference to the object */
 	UPROPERTY(EditDefaultsOnly, category = "Action")
 	FName ActionName;
+
+	UWorld* GetWorld() const override;
 };

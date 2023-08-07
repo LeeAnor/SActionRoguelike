@@ -14,6 +14,10 @@ USActionComponent::USActionComponent()
 void USActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	for (auto ActionClass : DefaultActions)
+	{
+		AddAction(ActionClass);
+	}
 	
 }
 

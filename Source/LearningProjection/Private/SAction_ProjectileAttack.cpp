@@ -22,7 +22,12 @@ void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
 	{
 		Character->PlayAnimMontage(AttackAnim);
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), AttackHandVFX, Character->GetMesh()->GetSocketLocation(HandSocketName), Character->GetActorRotation());
+		/*
+		Assignment3 - 2 - 2:³¢ÊÔÊ¹ÓÃSpawnEmitterAttached´úÌæSpawnEmitterAtLocation£¬Answers:P46
+		UGameplayStatics::SpawnEmitterAttached(CastingEffect, GetMesh(), "Muzzle_01", FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), AttackHandVFX, GetMesh()->GetSocketLocation("Muzzle_01"), GetActorRotation());
+		*/
+		UGameplayStatics::SpawnEmitterAttached(CastingEffect, Character->GetMesh(), "Muzzle_01", FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 
 		FTimerHandle TimerHandle_AttackDelay;
 		FTimerDelegate Delegate;

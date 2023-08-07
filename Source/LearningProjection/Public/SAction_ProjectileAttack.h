@@ -30,6 +30,9 @@ protected:
 	UAnimMontage* AttackAnim;
 
 	/* Particle System played during attack animation*/
+	UPROPERTY(EditAnywhere, category = "Attack")
+	UParticleSystem* CastingEffect;
+
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UParticleSystem* AttackHandVFX;
 

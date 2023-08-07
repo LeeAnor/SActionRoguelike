@@ -17,12 +17,12 @@ ASCharacter::ASCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	SpringArmCmp = CreateDefaultSubobject<USpringArmComponent>("SpringArmCmp");
-	SpringArmCmp->SetupAttachment(RootComponent);
-	SpringArmCmp->bUsePawnControlRotation = true;	//camera接受自Pawn身上的playerController的鼠标输入
+	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmCmp");
+	SpringArmComp->SetupAttachment(RootComponent);
+	SpringArmComp->bUsePawnControlRotation = true;	//camera接受自Pawn身上的playerController的鼠标输入
 
-	CameraCmp = CreateDefaultSubobject<UCameraComponent>("CameraCmp");
-	CameraCmp->SetupAttachment(SpringArmCmp);
+	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraCmp");
+	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractComponent>("InteractionComp");
 	AttributeComp = CreateDefaultSubobject<USAttributesComponent>("AttributeComp");
@@ -32,7 +32,6 @@ ASCharacter::ASCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
-	AttackAnimDelay = 0.17f;
 }
 
 void ASCharacter::PostInitializeComponents()
@@ -59,7 +58,7 @@ void ASCharacter::Tick(float DeltaTime)
 
 FVector ASCharacter::GetPawnViewLocation() const
 {
-	return CameraCmp->GetComponentLocation();
+	return CameraComp->GetComponentLocation();
 }
 
 void ASCharacter::MoveForward(float value)
@@ -110,44 +109,18 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	
 }
 
-
-
-void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta)
 {
-	if (ensureAlways(ClassToSpawn))
+	if (Delta < 0.0f && NewHealth > 0.0f)
 	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");	//从骨骼中获取对应Socket的位置
-		FVector TraceStartLocation = CameraCmp->GetComponentLocation();
-		FVector TraceEndLocation = CameraCmp->GetComponentLocation() + (GetControlRotation().Vector() * 5000);
+		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->GetTimeSeconds());	//材质闪烁效果
 
-		FCollisionObjectQueryParams ObjParams;	//声明碰撞参数
-		ObjParams.AddObjectTypesToQuery(ECC_WorldStatic);
-		ObjParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-		ObjParams.AddObjectTypesToQuery(ECC_Pawn);
+	}
+	if (NewHealth <= 0.0f && Delta <= 0.0f)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
 
-		FCollisionShape Shape;
-		Shape.SetSphere(20.f);
-
-		FCollisionQueryParams Params;	//设置出手时忽略与手部的碰撞
-		Params.AddIgnoredActor(this);
-
-		FActorSpawnParameters SpawnParameters;	//声明SpawnActor()函数的生成参数
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//设置SpawnActor()函数的生成参数
-		SpawnParameters.Instigator = this;
-
-		FHitResult Hit;
-		//GetWorld()->SweepSingleByObjectType(Hit, TraceStartLocation, TraceEndLocation, FQuat::Identity, ObjParams, Shape, Params);
-		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStartLocation, TraceEndLocation, FQuat::Identity, ObjParams,Shape, Params))
-		{
-			TraceEndLocation = Hit.ImpactPoint;
-		}
-
-		FRotator SpawnRotation = UKismetMathLibrary::FindLookAtRotation(HandLocation, TraceEndLocation);
-		//FRotator SpawnRotation = FRotationMatrix::MakeFromX(TraceEndLocation - HandLocation).Rotator();  
-
-		FTransform SpawnTM = FTransform(SpawnRotation, HandLocation);
-		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParameters);
-		//DrawDebugLine(GetWorld(), HandLocation, Hit.ImpactPoint, FColor::Green, false, 2.f, 0, 2.f);
+		DisableInput(PC);
 	}
 }
 
@@ -169,67 +142,24 @@ void ASCharacter::PrimaryInteract()
 	}
 }
 
-void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributesComponent* OwningComp, float NewHealth, float Delta)
-{
-	if (Delta < 0.0f && NewHealth > 0.0f)
-	{
-		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->GetTimeSeconds());	//材质闪烁效果
-
-	}
-	if (NewHealth <= 0.0f && Delta <= 0.0f)
-	{
-		APlayerController* PC = Cast<APlayerController>(GetController());
-
-		DisableInput(PC);
-	}
-}
-
 void ASCharacter::PrimaryAttack()
 {
-	PlayAnimMontage(AttackAnim);
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, AttackAnimDelay);
-}
-
-void ASCharacter::PrimaryAttack_TimeElapsed()
-{
-	//Assignment3-2-2:尝试使用SpawnEmitterAttached代替SpawnEmitterAtLocation，Answers:P46
-	//UGamEplayStatics::SpawnEmitterAttached(CastingEffect, GetMesh(), "Muzzle_01", FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), AttackHandVFX, GetMesh()->GetSocketLocation("Muzzle_01"), GetActorRotation());
-
-	SpawnProjectile(ProjectileClass);
+	ActionComp->StartActionByName(this, "PrimaryAttack");
 }
 
 void ASCharacter::BlackHoleAttack()
 {
-	PlayAnimMontage(AttackAnim);
-	GetWorldTimerManager().SetTimer(TimerHandle_BlackHoleAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, AttackAnimDelay);
-}
-
-void ASCharacter::BlackHoleAttack_TimeElapsed()
-{
-	SpawnProjectile(BlackHoleProjectileClass);
+	ActionComp->StartActionByName(this, "BlackHole");
 }
 
 void ASCharacter::DashAttack()
 {
-	PlayAnimMontage(AttackAnim);
-	GetWorldTimerManager().SetTimer(TimerHandle_DashAttack, this, &ASCharacter::DashAttack_TimeElapsed, AttackAnimDelay);
-}
-
-void ASCharacter::DashAttack_TimeElapsed()
-{
-	SpawnProjectile(DashProjectileClass);
+	ActionComp->StartActionByName(this, "Dash");
 }
 
 void ASCharacter::ExplodeAttack()
 {
-	PlayAnimMontage(AttackAnim);
-	GetWorldTimerManager().SetTimer(TimerHandle_ExplodeAttack, this, &ASCharacter::ExplodeAttack_TimeElapsed, AttackAnimDelay);
-}
-
-void ASCharacter::ExplodeAttack_TimeElapsed()
-{
-	SpawnProjectile(ExplodeProjectileClass);
+	ActionComp->StartActionByName(this, "BlackExplode");
 }
 
 //Exec控制台函数

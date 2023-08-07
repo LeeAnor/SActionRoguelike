@@ -28,6 +28,9 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, Category = "Action")
+	TArray<TSubclassOf<USAction>> DefaultActions;
+
 	UPROPERTY()
 	TArray<USAction*> Actions;
 

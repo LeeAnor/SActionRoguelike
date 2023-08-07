@@ -11,8 +11,6 @@ class UCameraComponent;
 class USpringArmComponent;
 class USInteractComponent;
 class USAttributesComponent;
-class UAnimMontage;
-class UParticleSysytem;
 class USActionComponent;
 
 UCLASS()
@@ -26,36 +24,12 @@ public:
 	ASCharacter();
 
 protected:
-	float AttackAnimDelay;
-
-	FTimerHandle TimerHandle_PrimaryAttack;
-	FTimerHandle TimerHandle_BlackHoleAttack;
-	FTimerHandle TimerHandle_DashAttack;
-	FTimerHandle TimerHandle_ExplodeAttack;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> BlackHoleProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> DashProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ExplodeProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnim;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UParticleSystem* AttackHandVFX;
 
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* SpringArmCmp;
+	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* CameraCmp;
+	UCameraComponent* CameraComp;
 	
 	UPROPERTY(VisibleAnywhere, Category = "components")
 	USInteractComponent* InteractionComp;
@@ -74,22 +48,16 @@ protected:
 
 	void PrimaryInteract();
 
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
-
 	void SprintStart();
 	void SprintStop();
 
 	void PrimaryAttack();
-	void PrimaryAttack_TimeElapsed();
 
 	void BlackHoleAttack();
-	void BlackHoleAttack_TimeElapsed();
 
 	void DashAttack();
-	void DashAttack_TimeElapsed();
 
 	void ExplodeAttack();
-	void ExplodeAttack_TimeElapsed();
 	
 	virtual FVector GetPawnViewLocation() const override; 
 

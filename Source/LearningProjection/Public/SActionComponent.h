@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameplayTagContainer.h"
 #include "SActionComponent.generated.h"
 
 class USAction;
@@ -14,7 +15,9 @@ class LEARNINGPROJECTION_API USActionComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Tags")
+	FGameplayTagContainer ActiveGameplayTags;
+
 	USActionComponent();
 
 	UFUNCTION(BlueprintCallable, category = "Actions")

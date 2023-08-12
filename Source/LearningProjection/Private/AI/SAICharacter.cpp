@@ -8,6 +8,8 @@
 #include "DrawDebugHelpers.h"
 #include "BrainComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "SActionComponent.h"
+#include "SAttributesComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SWorldUserWidget.h"
 
@@ -17,6 +19,8 @@ ASAICharacter::ASAICharacter()
     AttributeComp = CreateDefaultSubobject<USAttributesComponent>("AttributeComp");
 
  	PawnSensingComp= CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+
+    ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
 
     GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
 

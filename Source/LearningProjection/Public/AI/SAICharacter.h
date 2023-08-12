@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "SAttributesComponent.h"
 #include "SAICharacter.generated.h"
 
 class UPawnSensingComponent;
 class USAttributesComponent;
 class UAnimMontage;
 class USWorldUserWidget;
+class USActionComponent;
 
 UCLASS()
 class LEARNINGPROJECTION_API ASAICharacter : public ACharacter
@@ -28,14 +28,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UUserWidget>  HealthBarWidgetClass;
 
+	UPROPERTY(VisibleAnywhere, Category = "Material")
+	FName TimeToHitParamName;
+
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 	USAttributesComponent* AttributeComp;
 
-	UPROPERTY(VisibleAnywhere, Category="Material")
-	FName TimeToHitParamName;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USActionComponent* ActionComp;
 
 	void SetTargetActor(AActor* NewTargetActor);
 

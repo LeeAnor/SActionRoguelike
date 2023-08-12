@@ -28,12 +28,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, category = "Tags")
 	FGameplayTagContainer BlockedTags;
 
+	bool bIsRunning;
 public:
+	UFUNCTION(BlueprintCallable, category = "Action")
+	bool IsRunning() const;
+
+	UFUNCTION(BlueprintNativeEvent, category = "Action")
+	bool CanStart(AActor* Instigator);
 
 	UFUNCTION(BlueprintNativeEvent, category = "Action")
 	void StartAction(AActor* Instigator);
 
-	UFUNCTION(BlueprintNativeEvent, category = "Action")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, category = "Action")
 	void StopAction(AActor* Instigator);
 
 	/*Action nickname to start / stop without a reference to the object */

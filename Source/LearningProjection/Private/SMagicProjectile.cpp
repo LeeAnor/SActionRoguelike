@@ -7,6 +7,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "SGamePlayFunctionLibrary.h"
+#include "SActionComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 ASMagicProjectile::ASMagicProjectile()
@@ -21,6 +23,19 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (OtherActor && OtherActor!=GetInstigator())
 	{
+		//FName Muzzle = "Muzzle_01";
+
+		/* static 会在调用此函数后一直保持于内存中,不会因为函数终止而丢失,在下一次调用此函数的时候不必再次声明 */
+		//static FGameplayTag Tag = FGameplayTag::RequestGameplayTag("Status.Parrying");
+
+		USActionComponent* ActionComp = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
+		if (ActionComp && ActionComp->ActiveGameplayTags.HasTag(ParryTag))
+		{
+			MovementComp->Velocity = - MovementComp->Velocity;
+			SetInstigator(Cast<APawn>(OtherActor));
+			return;
+		}
+
 		/*USAttributesComponent* AttributeComp = USAttributesComponent::GetAttributes(OtherActor);
 		if (AttributeComp)
 		{

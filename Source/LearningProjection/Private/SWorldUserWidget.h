@@ -16,12 +16,14 @@ class USWorldUserWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
+
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 	UPROPERTY(meta = (BindWidget))
 	USizeBox* ParentSizeBox;
 
 public:
+
 	UPROPERTY(EditAnywhere, Category = "UI")
 	FVector WorldOffset;
 

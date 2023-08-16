@@ -65,7 +65,7 @@ void ASExplosiveProjectile::ApplyRangedDamage()
 	ECollisionChannel TraceChannel;
 	TraceChannel = { ECC_Pawn };
 	
-	/*使用通道检测SweepMultiByChannel可以防止在进行射线检测时返回结果里包含PhysicalBody中的不同骨骼(如脊椎、头)*/
+	/*使用通道检测SweepMultiByChannel可以防止在进行射线检测时返回结果里包含PhysicalBody中的不同Primitive*/
 	if (GetWorld()->SweepMultiByChannel(OutHits, Start, End, FQuat::Identity, TraceChannel, MyColSphere))
 	{
 		for (auto& Hit : OutHits)

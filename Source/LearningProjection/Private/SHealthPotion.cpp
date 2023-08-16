@@ -13,8 +13,9 @@ ASHealthPotion::ASHealthPotion()
 
 	CooldownTimer = 10.0f;
 
-	MeshComp->OnComponentBeginOverlap.AddDynamic(this, &ASHealthPotion::OnActorOverlap);
+	//MeshComp->OnComponentBeginOverlap.AddDynamic(this, &ASHealthPotion::OnActorOverlap);
 }
+
 
 void ASHealthPotion::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -26,7 +27,7 @@ void ASHealthPotion::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			USAttributesComponent* PlayerAttributeComp = Cast<USAttributesComponent>(PlayerPawn->GetComponentByClass(USAttributesComponent::StaticClass()));
 			if (PlayerAttributeComp)
 			{
-				if (PlayerAttributeComp->ApplyHealthChange(this, 50.0f)) 
+				if (PlayerAttributeComp->ApplyHealthChange(this, 50.0f))
 				{
 					HideAndCooldownHealthPotion();
 				}
@@ -34,6 +35,8 @@ void ASHealthPotion::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		}
 	}
 }
+
+
 
 void ASHealthPotion::HideAndCooldownHealthPotion()
 {

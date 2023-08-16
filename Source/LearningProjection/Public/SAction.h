@@ -29,6 +29,7 @@ protected:
 	FGameplayTagContainer BlockedTags;
 
 	bool bIsRunning;
+
 public:
 	UFUNCTION(BlueprintCallable, category = "Action")
 	bool IsRunning() const;
@@ -41,6 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, category = "Action")
 	void StopAction(AActor* Instigator);
+
+	UPROPERTY(EditDefaultsOnly, category = "Action")
+	bool bAutoStart;
 
 	/*Action nickname to start / stop without a reference to the object */
 	UPROPERTY(EditDefaultsOnly, category = "Action")

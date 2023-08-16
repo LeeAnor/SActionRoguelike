@@ -57,6 +57,9 @@ public:
 	bool IsAlive() const { return Health > 0.0f; };
 
 	UFUNCTION(BlueprintCallable)
+	bool IsFullHealth() const { return Health==MaxHealth? true: false; };
+
+	UFUNCTION(BlueprintCallable)
 	bool KillSelf(AActor* intigator);
 
 
